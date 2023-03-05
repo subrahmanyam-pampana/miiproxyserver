@@ -1,0 +1,13 @@
+{
+  "dependencies": {
+    "archiver": "^5.3.1",
+    "express": "^4.18.2",
+    "request": "^2.88.2",
+    "xml2js": "^0.4.23"
+  },
+  "scripts": {
+    "push": "node ./utils/push_to_mii.js",
+    "start": "node server.js",
+    "pull": "node ./utils/pull_from_mii.js"
+  }
+}

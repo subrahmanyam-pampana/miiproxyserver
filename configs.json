@@ -1,0 +1,17 @@
+{
+    "userName":"subrahmanyam",
+    "server":"http://vpunsezsap012.ad.infosys.com:50000",
+    "miiRootFolder":"01_23_SAPMII_Training/WEB/EmployeeDashboard",
+    "LocalPort":3003,
+    "endPoints":{
+        "get":[
+            "/XMII/Illuminator",
+            "/XMII/Runner"
+        ],
+        "post":[
+            "/XMII/Illuminator",
+            "/XMII/Runner",
+            "/XMII/Catalog"
+        ]
+    }
+}
