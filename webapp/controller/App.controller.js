@@ -34,6 +34,7 @@ sap.ui.define(['sap/ui/core/mvc/Controller',
             addEmployee: function () {
                 let data = this.getView().getModel("employee").getData()
                 let that = this
+                
 
                 if (!data.userName) {
                     MessageBox.error("Please Enter user name")
