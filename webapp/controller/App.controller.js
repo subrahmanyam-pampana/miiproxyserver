@@ -11,7 +11,6 @@ sap.ui.define(['sap/ui/core/mvc/Controller',
         return Controller.extend("mii.employee.controller.App", {
             /*code starts here*/
             onInit: function () { 
-		//new change
                 this._getEmployeeDetails()
                 let employeeData = {
                     "userName": "",
