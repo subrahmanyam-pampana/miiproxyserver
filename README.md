@@ -10,7 +10,7 @@ This proxy act as a connector between MII server and local webserver. With the u
 
 
 ## Prerequasites
-1. Install latest version of node js from [official website](https://nodejs.org/en/download/). Make sure your configured path environment variable.
+1. Install latest version of node js from [official website](https://nodejs.org/en/download/). Make sure you configured path environment variable.
 2. Install VS code from [official website](https://code.visualstudio.com/download)
 
 ## Server setup
