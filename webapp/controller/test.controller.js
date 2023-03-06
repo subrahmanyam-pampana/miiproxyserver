@@ -7,5 +7,8 @@ sap.ui.define([
 
 	return Controller.extend("mii.employee.controller.test", {
         //test1
+	onInit:function(){
+		console.log("test")
+	}
 	});
 });

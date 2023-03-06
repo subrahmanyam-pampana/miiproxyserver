@@ -4,14 +4,11 @@ const { parse_param_str, isFile } = require('./util')
 const xml2js = require('xml2js');
 const configs = JSON.parse(fs.readFileSync('./configs.json'))
 const modifiedFiles = JSON.parse(fs.readFileSync('./data/modifiedFiles.json'))
-const cookie = fs.readFileSync('./data/cookies.txt')
+let cookie;
+const { getCookie } = require('./getCookie')
 
-if (cookie.length === 0) {
-    console.log("Credentials expired. Please restart the server")
-    return
-}
-
-function pushFilestoMII() {
+async function pushFilestoMII() {
+  cookie = await getCookie()
   let failed_files = []
   let promiseArray = []
   if(Object.keys(modifiedFiles).length===0){

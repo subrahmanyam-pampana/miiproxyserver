@@ -1,7 +1,7 @@
 {
-    "userName":"subrahmanyam",
-    "server":"http://vpunsezsap012.ad.infosys.com:50000",
-    "miiRootFolder":"01_23_SAPMII_Training/WEB/EmployeeDashboard",
+    "userName":"<mii userName>",
+    "server":"<http://mymiiserver.com:50000>",
+    "miiRootFolder":"<mii root folder path>",
     "LocalPort":3003,
     "endPoints":{
         "get":[

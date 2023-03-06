@@ -11,6 +11,7 @@ sap.ui.define(['sap/ui/core/mvc/Controller',
         return Controller.extend("mii.employee.controller.App", {
             /*code starts here*/
             onInit: function () { 
+                //adding new change
                 this._getEmployeeDetails()
                 let employeeData = {
                     "userName": "",
@@ -28,8 +29,6 @@ sap.ui.define(['sap/ui/core/mvc/Controller',
                 let oModel = new JSONModel(url)
                 this.getView().setModel(oModel)
             },
-
-
             addEmployee: function () {
                 let data = this.getView().getModel("employee").getData()
                 let that = this
