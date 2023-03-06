@@ -4,9 +4,9 @@ This proxy act as a connector between MII server and local webserver. With the u
 <img width="671" alt="image" src="https://user-images.githubusercontent.com/79074273/223067506-c663acdc-f989-4a38-b85d-c8fa47e3df12.png">
 
 ## commands
-`npm run pull` to pull the code from mii workbench folder
-`npm run start` to start the node server
-`npm run push` to push changes back to mii workbench.
+- `npm run pull` to pull the code from mii workbench folder
+- `npm run start` to start the node server
+- `npm run push` to push changes back to mii workbench.
 
 
 ## Prerequasites
