@@ -18,7 +18,7 @@ configureEndPoints(configs.endPoints)
 
 app.listen(configs.LocalPort, () => {
     console.log('listening at port ' + configs.LocalPort)
-    getCookie().then(_cookie=>{
+    getCookie().then(_cookie => {
         cookie = _cookie
         console.log("go to this url see the ui5 app", "http://localhost:" + configs.LocalPort + "/index.html")
     })
@@ -28,7 +28,7 @@ function configureEndPoints(endPoints) {
     //get end points
     endPoints.get.forEach(endPoint => {
         app.get(endPoint, (req, res) => {
-            get_data(req.query, 'Illuminator').then(data => {
+            get_data(req.query, endPoint).then(data => {
                 if (req.query['Content-Type'] === 'text/xml') {
                     res.set('Content-Type', 'application/xml')
                 }
@@ -39,9 +39,9 @@ function configureEndPoints(endPoints) {
 
     //post end points
 
-    endPoints.get.forEach(endPoint => {
+    endPoints.post.forEach(endPoint => {
         app.post(endPoint, (req, res) => {
-            post_data(req.body, 'Illuminator').then(data => {
+            post_data(req.body, endPoint).then(data => {
                 if (req.body['Content-Type'] === 'text/xml') {
                     res.set('Content-Type', 'application/xml')
                 }
@@ -53,52 +53,44 @@ function configureEndPoints(endPoints) {
 
 function get_data(query, service) {
     return new Promise((resolve, reject) => {
-        request.get(`${configs.server}/XMII/${service}?${parse_param_str(query)}`,
-            {
-                headers: {
-                    'Cookie': cookie,
-                },
-
-                'json': (query['Content-Type'] === 'text/json') ? true : false
+        request({
+            url: `${configs.server}${service}`,
+            method: 'get',
+            headers: {
+                'Cookie': cookie,
+                'Content-Type':(query['Content-Type'] === 'text/json')?'application/json':'application/xml'
             },
-            (error, response, body) => {
-                if (error) {
-                    reject(response)
-                } else {
-                    resolve(body)
-                }
-            })
+            'json': (query['Content-Type'] === 'text/json') ? true : false,
+            qs: query
+        }, (error, response, body) => {
+            if (error) {
+                reject(response)
+            } else {
+                resolve(body)
+            }
+        })
     })
 }
 
 function post_data(query, service) {
     return new Promise((resolve, reject) => {
-        request.post(`${configs.server}/XMII/${service}?${parse_param_str(query)}`,
-            {
-                // 'auth':oAuth,
-                headers: {
-                    'Cookie': cookie,
-                },
-                'json': (query['Content-Type'] === 'text/json') ? true : false
+        request({
+            url: `${configs.server}${service}`,
+            method: 'post',
+            headers: {
+                'Cookie': cookie,
+                'Content-Type':(query['Content-Type'] === 'text/json')?'application/json':'application/xml'
             },
-            (error, response, body) => {
-                if (error) {
-
-                    reject(response)
-                } else {
-                    resolve(body)
-                }
-            })
+            'json': (query['Content-Type'] === 'text/json') ? true : false,
+            qs:query
+        }, (error, response, body) => {
+            if (error) {
+                reject(response)
+            } else {
+                resolve(body)
+            }
+        })
     })
-}
-
-function parse_param_str(obj) {
-    let paramStr = ''
-    let keys = Object.keys(obj)
-    for (let key of keys) {
-        paramStr += key + '=' + obj[key] + '&'
-    }
-    return paramStr
 }
 
 updateModified()
