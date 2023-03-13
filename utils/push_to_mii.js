@@ -16,6 +16,11 @@ async function pushFilestoMII() {
   }
   console.log('Below files are pushed to MII')
   for (let file of Object.keys(modifiedFiles)) {
+    if (modifiedFiles[file].status === 'deleted') {
+      console.log(modifiedFiles[file].path, ", can't push this deleted file in your local directory to mii wb")
+      delete modifiedFiles[file]
+      continue;
+    }
     const promise = new Promise((resolve, reject) => {
       saveFile(modifiedFiles[file].path, fs.readFileSync(`./webapp/${file}`)).then((res) => {
         console.log(res)
@@ -43,7 +48,6 @@ async function pushFilestoMII() {
   }).catch(err => console.log(err))
 }
 
-
 function saveFile(filePath, content) {
   return new Promise((resolve, reject) => {
     const bufferObj = Buffer.from(content, 'utf-8');
@@ -62,7 +66,7 @@ function saveFile(filePath, content) {
         'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
       },
       qs: params,
-      jar:jar
+      jar: jar
     };
 
     request(options, (error, response, body) => {
