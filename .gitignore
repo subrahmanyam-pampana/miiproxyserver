@@ -1,5 +1,3 @@
 /node_modules
 /webapp
 *.log
-/configs.json
-/data

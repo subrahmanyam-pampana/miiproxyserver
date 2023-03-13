@@ -1,0 +1,17 @@
+{
+    "userName":"<userName>",
+    "server":"<http://mymiiserver.com:50000>",
+    "miiRootFolder":"<mii project root folder path>",
+    "LocalPort":3000,
+    "endPoints":{
+        "get":[
+            "/XMII/Illuminator",
+            "/XMII/Runner",
+            "/XMII/PropertyAccessServlet"
+        ],
+        "post":[
+            "/XMII/Illuminator",
+            "/XMII/Runner"
+        ]
+    }
+}
