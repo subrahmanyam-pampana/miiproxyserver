@@ -1,11 +1,11 @@
 const fs = require('fs')
 const request = require('request')
 const xml2js = require('xml2js');
-const { getCookie } = require('./getCookie')
+const { getJar } = require('./getCookie')
 
 const configs = JSON.parse(fs.readFileSync('./configs.json'))
 const parser = new xml2js.Parser({ explicitArray: false });
-let cookie;
+let jar;
 
 function getFilesList(folderPath, type) {
     return new Promise((resolve, reject) => {
@@ -13,7 +13,7 @@ function getFilesList(folderPath, type) {
             url: `${configs.server}/XMII/Catalog`,
             method: 'post',
             headers: {
-                cookie: cookie
+                // cookie: cookie
             },
             qs: {
                 'Mode': (type === 'folder' ? 'ListFolders' : 'List'),
@@ -21,7 +21,8 @@ function getFilesList(folderPath, type) {
                 'DoStateCheck': true,
                 'Content-Type': 'text/xml',
                 'Folder': folderPath
-            }
+            },
+            jar: jar
         }, (error, res, body) => {
             if (error) {
                 console.log("Error while getting the filesList.function:getFilesList, error: " + error)
@@ -88,7 +89,7 @@ function readMIIFile(path) {
             url: `${configs.server}/XMII/Catalog`,
             method: 'get',
             headers: {
-                cookie: cookie
+                // cookie: cookie
             },
             qs: {
                 Mode: 'LoadBinary',
@@ -97,7 +98,8 @@ function readMIIFile(path) {
                 'Content-Type': 'text/json',
                 ObjectName: path
             },
-            json: true
+            json: true,
+            jar: jar
         }, (err, res, body) => {
             if (!err && (res.statusCode === 200 || res.statusCode === 201)) {
                 try {
@@ -114,8 +116,8 @@ function readMIIFile(path) {
     })
 }
 
-getCookie().then((_cookie) => {
-    cookie = _cookie
+getJar().then((_jar) => {
+    jar = _jar
     dfs(configs.miiRootFolder).then(() => {
         console.log("code pulled from mii and placed all the resources in webapp folder")
 

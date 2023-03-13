@@ -2,11 +2,12 @@ const express = require('express');
 const request = require('request')
 const bodyParser = require('body-parser');
 const fs = require('fs');
+
 const updateModified = require('./utils/updateModified')
 const app = express();
-let cookie;
 const configs = JSON.parse(fs.readFileSync('./configs.json'))
-const { getCookie } = require('./utils/getCookie')
+const { getCookie,getJar } = require('./utils/getCookie')
+let jar;
 
 app.use(bodyParser.urlencoded({
     extended: true
@@ -18,9 +19,11 @@ configureEndPoints(configs.endPoints)
 
 app.listen(configs.LocalPort, () => {
     console.log('listening at port ' + configs.LocalPort)
-    getCookie().then(_cookie => {
-        cookie = _cookie
+    getJar().then(_jar=>{
+        jar = _jar
         console.log("go to this url see the ui5 app", "http://localhost:" + configs.LocalPort + "/index.html")
+    }).catch((err)=>{
+        console.log(err)
     })
 })
 
@@ -57,11 +60,12 @@ function get_data(query, service) {
             url: `${configs.server}${service}`,
             method: 'get',
             headers: {
-                'Cookie': cookie,
-                'Content-Type':(query['Content-Type'] === 'text/json')?'application/json':'application/xml'
+                // 'Cookie': cookie,
+                'Content-Type': (query['Content-Type'] === 'text/json') ? 'application/json' : 'application/xml'
             },
             'json': (query['Content-Type'] === 'text/json') ? true : false,
-            qs: query
+            qs: query,
+            jar:jar
         }, (error, response, body) => {
             if (error) {
                 reject(response)
@@ -78,11 +82,12 @@ function post_data(query, service) {
             url: `${configs.server}${service}`,
             method: 'post',
             headers: {
-                'Cookie': cookie,
-                'Content-Type':(query['Content-Type'] === 'text/json')?'application/json':'application/xml'
+                // 'Cookie': cookie,
+                'Content-Type': (query['Content-Type'] === 'text/json') ? 'application/json' : 'application/xml'
             },
             'json': (query['Content-Type'] === 'text/json') ? true : false,
-            qs:query
+            qs: query,
+            jar:jar
         }, (error, response, body) => {
             if (error) {
                 reject(response)
