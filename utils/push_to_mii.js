@@ -23,7 +23,6 @@ async function pushFilestoMII() {
     }
     const promise = new Promise((resolve, reject) => {
       saveFile(modifiedFiles[file].path, fs.readFileSync(`./webapp/${file}`)).then((res) => {
-        console.log(res)
         if (res && !res.FatalError) {
           console.log(modifiedFiles[file].path)
           delete modifiedFiles[file]
