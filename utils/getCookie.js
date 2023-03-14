@@ -1,82 +1,75 @@
 var request = require('request');
 const fs = require('fs')
-const readline = require('readline');
+const prompt = require('prompt')
+const cheerio = require('cheerio');
 
 const configs = JSON.parse(fs.readFileSync('./configs.json'))
-const cookiesFilePath = './data/cookies.txt';
-const cookie = fs.readFileSync(cookiesFilePath).toString();
+const jar = request.jar()
 
-const rl = readline.createInterface({
-    input: process.stdin,
-    output: process.stdout,
-    hideEchoBack: true
-});
+async function promptPassword() {
+    prompt.start()
+    prompt.message = ''
+    prompt.delimiter = ':'
+    const { password } = await prompt.get({
+        properties: {
+            password: {
+                message: 'Password',
+                hidden: true,
+                replace: '*'
+            }
+        }
+    })
+
+    return password
+}
 
 // target URL
-var options = {
+const options = {
     url: configs.server + '/XMII/Illuminator',
     method: 'GET',
+    headers: {
+        'Content-Type': 'application/xml'
+    },
     auth: {
         user: configs.userName,
         pass: ''
-    }
+    },
+    jar
 };
 
-function isCookieExpired(cookieStr) {
-    if (cookieStr === "")
-        return true
-
-    const jar = request.jar();
-    const url = new URL(configs.server + '/XMII/Illuminator');
-    jar.setCookie(cookieStr, url);
-    const cookies = jar.getCookies(url);
-    const curCookie = cookies[0];
-    return curCookie && curCookie.expires && new Date(curCookie.expires).getTime() <= Date.now();
-}
-
-async function getCookie() {
-
-    try {
-        // Check if current cookie is expired
-        if (isCookieExpired(cookie)) throw new Error('Expired cookie')
-        return cookie
-    } catch (error) {
-        console.log("Your session to MII server is expired. Please relogin!")
+function getJar() {
+    return new Promise(async (resolve, reject) => {
+        console.log("Please Login to MII Server")
         console.log(`MII server: ${configs.server}`);
         console.log(`User name: ${configs.userName}`);
-
-        const userInput = await new Promise((res, rej) => {
-            rl.question('Please Enter your password: ', res);
-        });
-
-        try {
-            options.auth.pass = userInput;
-            const _cookie = await requestCookie();
-            fs.writeFileSync(cookiesFilePath, _cookie);
-            return _cookie;
-
-        } catch (error) {
-            console.error('Unable to retrieve new cookie:', error);
-            throw error; // Rethrow error for higher-level error handling
+        const password = await promptPassword()
+        if (password) {
+            options.auth.pass = password
+        } else {
+            console.log("Please Enter a valid password")
+            getJar()
         }
-    }
-}
 
-function requestCookie() {
-    return new Promise((resolve, reject) => {
-        request(options,
-            (error, response, body) => {
-                if (!error && (response.statusCode === 200 || response.statusCode === 201)) {
-                    resolve(response.headers['set-cookie'][0])
+        request(options, (error, response, body) => {
+            try {
+                if (!error && response.statusCode === 200) {
+                    const $ = cheerio.load(body);
+                    if($('.urLogonTable').html() === null){
+                        resolve(jar)
+                    }else{
+                        reject("Invalid Credentials. Please relogin")
+                    }
+
                 } else {
-                    console.log("error=>", error)
                     reject(error)
                 }
-            })
+            } catch (err) {
+                reject(err)
+            }
+        })
     })
 }
 
-
 module.exports = {
-    getCookie
+   getJar
 }

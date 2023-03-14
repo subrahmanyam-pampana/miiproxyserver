@@ -14,7 +14,6 @@ function isFile(path) {
       const stats = fs.lstatSync(path)
       return stats.isDirectory() ? false : true
     } catch (error) {
-      console.error(error)
       return false 
     }
   }
