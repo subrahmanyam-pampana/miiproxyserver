@@ -9,6 +9,7 @@ const configs = JSON.parse(fs.readFileSync('./configs.json'))
 const { getCookie,getJar } = require('./utils/getCookie')
 let jar;
 
+
 app.use(bodyParser.urlencoded({
     extended: true
 }));

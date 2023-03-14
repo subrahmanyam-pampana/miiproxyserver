@@ -8,7 +8,7 @@ module.exports = function updateModified() {
       let modifiedFiles = JSON.parse(fs.readFileSync('./data/modifiedFiles.json'))
       filename = filename.replaceAll('\\', '/')
       let filePath = './webapp/' + filename
-
+ 
       //checking for file deletion
       if (eventType === 'rename' && !fs.existsSync(filePath)) {
         modifiedFiles[filename].status = "deleted"

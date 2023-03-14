@@ -38,7 +38,7 @@ async function pushFilestoMII() {
     })
     promiseArray.push(promise)
   }
-
+ 
   Promise.all(promiseArray).then(() => {
     if (failed_files.length > 0) {
       console.log("below files are failed to push to MII. Please push again")

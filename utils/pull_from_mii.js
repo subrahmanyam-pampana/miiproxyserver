@@ -108,7 +108,7 @@ function readMIIFile(path) {
                 } catch (err) {
                     reject(err)
                 }
-
+ 
             } else {
                 reject(err, res)
             }

@@ -23,6 +23,7 @@ async function promptPassword() {
     return password
 }
 
+
 // target URL
 const options = {
     url: configs.server + '/XMII/Illuminator',
