@@ -14,7 +14,7 @@ This proxy act as a connector between MII server and local webserver. With the u
 2. Install VS code from [official website](https://code.visualstudio.com/download)
 
 ## Server setup
-1. Download the project files from [later release](https://github.com/subrahmanyam-pampana/miiproxyserver/archive/refs/tags/v1.0.1.zip) and extract the files.
+1. Download the project files from [later release](https://github.com/subrahmanyam-pampana/miiproxyserver/archive/refs/tags/v1.0.0.zip) and extract the files.
 2. open config.json file and configure your mii user name, mii server details and your ui5 root folder path.
 
   - by default given illumnator and Runner servers end points in the configs file. in case your using any other mii services, include them in the endpoints
